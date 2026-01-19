@@ -1,0 +1,55 @@
+{
+  "expo": {
+    "name": "AI Rüya Yorumcusu",
+    "slug": "dream-interpreter",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1a1a2e"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.dreaminterpreter.app",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "Rüyanızı sesli anlatmak için mikrofon izni gereklidir."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#1a1a2e"
+      },
+      "package": "com.dreaminterpreter.app",
+      "permissions": [
+        "RECORD_AUDIO",
+        "NOTIFICATIONS"
+      ],
+      "versionCode": 1
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "scheme": "dreaminterpreter",
+    "notification": {
+      "icon": "./assets/notification-icon.png",
+      "color": "#7c4dff"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f48bcffe-3a26-4027-a23b-c00af9d35399"
+      }
+    },
+    "owner": "durangzr",
+    "plugins": [
+      "expo-font",
+      "expo-web-browser"
+    ]
+  }
+}

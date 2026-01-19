@@ -1,0 +1,507 @@
+{
+  "su": {
+    "pozitif": "Huzur, temizlenme ve yenilenme",
+    "negatif": "Duygusal karmaşa, bastırılmış duygular",
+    "genel": "Su, bilinçaltını ve duygusal durumu simgeler. Sakin su huzuru, dalgalı su karmaşayı işaret eder."
+  },
+  "yılan": {
+    "pozitif": "Yenilenme, dönüşüm, bilgelik",
+    "negatif": "İhanet korkusu, gizli tehlikeler",
+    "genel": "Yılan, bastırılmış duygular ve değişim süreçleriyle ilgilidir. Deri değiştirmesi dönüşümü simgeler."
+  },
+  "uçmak": {
+    "pozitif": "Özgürlük, başarı, sınırları aşma",
+    "negatif": "Gerçeklerden kaçma, kontrolsüzlük hissi",
+    "genel": "Uçmak, sınırları aşma isteğini ve özgürlük özlemini simgeler."
+  },
+  "düşmek": {
+    "pozitif": "Bırakma, teslim olma",
+    "negatif": "Kontrol kaybı, güvensizlik",
+    "genel": "Düşmek genellikle hayattaki kontrol kaybı korkusunu yansıtır."
+  },
+  "ev": {
+    "pozitif": "Güvenlik, aile, aidiyet",
+    "negatif": "Sıkışmışlık, geçmiş travmalar",
+    "genel": "Ev, kişinin iç dünyasını ve psikolojik durumunu simgeler."
+  },
+  "araba": {
+    "pozitif": "İlerleme, kontrol, bağımsızlık",
+    "negatif": "Yön kaybı, amaçsızlık",
+    "genel": "Araba, hayat yolculuğunuzu ve kontrolünüzü temsil eder."
+  },
+  "ölüm": {
+    "pozitif": "Yeni başlangıçlar, dönüşüm",
+    "negatif": "Kayıp korkusu, belirsizlik",
+    "genel": "Ölüm, genellikle bir dönemin sonu ve yeni başlangıçları simgeler."
+  },
+  "bebek": {
+    "pozitif": "Yeni projeler, masumiyet, potansiyel",
+    "negatif": "Sorumluluk korkusu, savunmasızlık",
+    "genel": "Bebek, yeni başlangıçları ve gelişmemiş potansiyelleri temsil eder."
+  },
+  "köpek": {
+    "pozitif": "Sadakat, arkadaşlık, koruma",
+    "negatif": "İhanet, güven sorunları",
+    "genel": "Köpek, sadakati ve güvenilir ilişkileri simgeler."
+  },
+  "kedi": {
+    "pozitif": "Bağımsızlık, sezgi, gizem",
+    "negatif": "Güven sorunları, aldatılma",
+    "genel": "Kedi, bağımsızlığı ve gizemli yönleri temsil eder."
+  },
+  "ateş": {
+    "pozitif": "Tutku, enerji, dönüşüm",
+    "negatif": "Öfke, yıkım, kontrol kaybı",
+    "genel": "Ateş, güçlü duyguları ve dönüşüm enerjisini simgeler."
+  },
+  "deniz": {
+    "pozitif": "Sonsuzluk, özgürlük, derinlik",
+    "negatif": "Bilinmezlik, boğulma hissi",
+    "genel": "Deniz, bilinçaltının derinliklerini ve duygusal durumu yansıtır."
+  },
+  "dağ": {
+    "pozitif": "Hedefler, kararlılık, başarı",
+    "negatif": "Engeller, zorluklar",
+    "genel": "Dağ, aşılması gereken zorlukları ve ulaşılması gereken hedefleri simgeler."
+  },
+  "ayna": {
+    "pozitif": "Öz-farkındalık, gerçekle yüzleşme",
+    "negatif": "Kimlik krizi, benlik kaybı",
+    "genel": "Ayna, kişinin kendisiyle yüzleşmesini ve iç gözlemini temsil eder."
+  },
+  "kuş": {
+    "pozitif": "Özgürlük, ruhsal yükseliş, perspektif",
+    "negatif": "Kaçma arzusu, gerçeklerden uzaklaşma",
+    "genel": "Kuş, özgürlük özlemi ve ruhsal yükselişi simgeler."
+  },
+  "para": {
+    "pozitif": "Değer, güç, fırsatlar",
+    "negatif": "Kayıp korkusu, materyalizm",
+    "genel": "Para, kişisel değerinizi ve güç algınızı yansıtır."
+  },
+  "okul": {
+    "pozitif": "Öğrenme, gelişim, hazırlık",
+    "negatif": "Yetersizlik hissi, sınav kaygısı",
+    "genel": "Okul, hayat derslerini ve değerlendirme korkularını simgeler."
+  },
+  "kapı": {
+    "pozitif": "Fırsatlar, yeni başlangıçlar",
+    "negatif": "Kapalı kapılar, engellenmiş yollar",
+    "genel": "Kapı, yaşamınızdaki geçişleri ve fırsatları temsil eder."
+  },
+  "merdiven": {
+    "pozitif": "İlerleme, yükseliş, başarı",
+    "negatif": "Zorluk, yorgunluk, belirsizlik",
+    "genel": "Merdiven, hayattaki ilerlemenizi ve çabanızı simgeler."
+  },
+  "saat": {
+    "pozitif": "Farkındalık, planlama, kontrol",
+    "negatif": "Zaman baskısı, geçmişe takılma",
+    "genel": "Saat, zaman algınızı ve yaşamınızdaki aciliyet hissini yansıtır."
+  },
+  "rüzgar": {
+    "pozitif": "Değişim, hareket, yenilenme",
+    "negatif": "Belirsizlik, kontrolsüzlük",
+    "genel": "Rüzgar, değişim rüzgarlarını ve hayatınızdaki ani gelişmeleri simgeler."
+  },
+  "ay": {
+    "pozitif": "Sezgi, kadınsı enerji, döngüler",
+    "negatif": "Karanlık yönler, gizli duygular",
+    "genel": "Ay, bilinçaltını, sezgiyi ve duygusal döngüleri temsil eder."
+  },
+  "güneş": {
+    "pozitif": "Aydınlanma, enerji, başarı",
+    "negatif": "Tükeniş, aşırı dikkat",
+    "genel": "Güneş, bilinç, enerji ve yaşam gücünü simgeler."
+  },
+  "yıldız": {
+    "pozitif": "Umut, rehberlik, hayaller",
+    "negatif": "Ulaşılmazlık, hayal kırıklığı",
+    "genel": "Yıldız, umutları, ideallerinizi ve rehberliği temsil eder."
+  },
+  "kan": {
+    "pozitif": "Yaşam gücü, tutku, bağ",
+    "negatif": "Kayıp, yaralanma, fedakarlık",
+    "genel": "Kan, yaşam enerjinizi, tutkularınızı ve aile bağlarını simgeler."
+  },
+  "göz": {
+    "pozitif": "Farkındalık, içgörü, bilgi",
+    "negatif": "Gözetlenme, paranoya",
+    "genel": "Göz, algıyı, bilgiyi ve iç görüyü temsil eder."
+  },
+  "diş": {
+    "pozitif": "Güç, özgüven",
+    "negatif": "Kayıp korkusu, yaşlanma endişesi",
+    "genel": "Diş düşmesi, kontrol kaybı ve değişim korkularını yansıtır."
+  },
+  "saç": {
+    "pozitif": "Güç, cinsellik, kimlik",
+    "negatif": "Güç kaybı, yaşlanma",
+    "genel": "Saç, gücünüzü, kimliğinizi ve öz saygınızı simgeler."
+  },
+  "hamile": {
+    "pozitif": "Yaratıcılık, yeni projeler, potansiyel",
+    "negatif": "Sorumluluk kaygısı, değişim korkusu",
+    "genel": "Hamilelik, yeni fikirlerin ve projelerin gelişimini temsil eder."
+  },
+  "yağmur": {
+    "pozitif": "Temizlenme, bereket, yenilenme",
+    "negatif": "Hüzün, depresyon",
+    "genel": "Yağmur, duygusal arınmayı ve yeniden doğuşu simgeler."
+  },
+  "kar": {
+    "pozitif": "Saflık, yeni başlangıçlar, huzur",
+    "negatif": "Duygusal soğukluk, izolasyon",
+    "genel": "Kar, saflığı, temiz bir sayfa açmayı ve duygusal durgunluğu temsil eder."
+  },
+  "fırtına": {
+    "pozitif": "Temizlenme, dönüşüm gücü",
+    "negatif": "Kaos, duygusal çalkantı",
+    "genel": "Fırtına, içsel çatışmaları ve güçlü duygusal değişimleri yansıtır."
+  },
+  "gül": {
+    "pozitif": "Aşk, güzellik, sevgi",
+    "negatif": "Dikenlerin yarattığı acı",
+    "genel": "Gül, aşkı ve güzelliği, ama aynı zamanda acının da bir parçası olduğunu simgeler."
+  },
+  "ağaç": {
+    "pozitif": "Büyüme, sağlamlık, kökler",
+    "negatif": "Katılık, değişime direnç",
+    "genel": "Ağaç, köklerinizi, büyümenizi ve yaşam enerjinizi temsil eder."
+  },
+  "bahçe": {
+    "pozitif": "Bolluk, huzur, büyüme",
+    "negatif": "İhmal edilmiş potansiyel",
+    "genel": "Bahçe, iç dünyanızı ve yetiştirdiğiniz özellikleri simgeler."
+  },
+  "köprü": {
+    "pozitif": "Geçiş, bağlantı, çözüm",
+    "negatif": "Belirsizlik, risk",
+    "genel": "Köprü, yaşamınızdaki geçişleri ve iki durum arası bağlantıyı temsil eder."
+  },
+  "tünel": {
+    "pozitif": "Geçiş, yolculuk, çıkış",
+    "negatif": "Karanlık, bilinmezlik",
+    "genel": "Tünel, zor bir dönemden geçişi ve ışığa ulaşma umudunu simgeler."
+  },
+  "hastane": {
+    "pozitif": "İyileşme, bakım, destek",
+    "negatif": "Hastalık korkusu, çaresizlik",
+    "genel": "Hastane, iyileşme ihtiyacını ve duygusal yaraları temsil eder."
+  },
+  "mezarlık": {
+    "pozitif": "Geçmişle barışma, kabul",
+    "negatif": "Kayıp, ölüm korkusu",
+    "genel": "Mezarlık, geçmişinizle yüzleşmeyi ve tamamlanmış döngüleri simgeler."
+  },
+  "telefon": {
+    "pozitif": "İletişim, bağlantı, mesaj",
+    "negatif": "Yanlış anlaşılma, kopukluk",
+    "genel": "Telefon, iletişim ihtiyacınızı ve sosyal bağlantılarınızı yansıtır."
+  },
+  "anahtar": {
+    "pozitif": "Çözüm, fırsat, erişim",
+    "negatif": "Kaybedilmiş fırsatlar",
+    "genel": "Anahtar, sorunlarınızın çözümünü ve yeni kapıları açma gücünü temsil eder."
+  },
+  "kilit": {
+    "pozitif": "Koruma, gizlilik, güvenlik",
+    "negatif": "Engellenme, sıkışmışlık",
+    "genel": "Kilit, sınırlarınızı ve koruduğunuz sırları simgeler."
+  },
+  "çanta": {
+    "pozitif": "Hazırlık, kaynaklar, taşınan yük",
+    "negatif": "Duygusal bagaj, yük",
+    "genel": "Çanta, taşıdığınız sorumlulukları ve duygusal yükü temsil eder."
+  },
+  "yol": {
+    "pozitif": "Yolculuk, ilerleme, seçimler",
+    "negatif": "Belirsizlik, kaybolma",
+    "genel": "Yol, hayat yolculuğunuzu ve karşınızdaki seçimleri simgeler."
+  },
+  "orman": {
+    "pozitif": "Doğallık, keşif, bilinçaltı",
+    "negatif": "Kaybolma, bilinmezlik korkusu",
+    "genel": "Orman, bilinçaltınızın derinliklerini ve keşfedilmemiş yönlerinizi temsil eder."
+  },
+  "çöl": {
+    "pozitif": "Arınma, basitlik, içsel yolculuk",
+    "negatif": "Yalnızlık, kıtlık, kaybolma",
+    "genel": "Çöl, duygusal kurakl ığı veya manevi bir arayışı simgeler."
+  },
+  "altın": {
+    "pozitif": "Değer, başarı, bolluk",
+    "negatif": "Açgözlülük, materyalizm",
+    "genel": "Altın, kişisel değerinizi, başarınızı ve içsel zenginliğinizi temsil eder."
+  },
+  "gümüş": {
+    "pozitif": "Sezgi, denge, manevi zenginlik",
+    "negatif": "İkinci planda kalma hissi",
+    "genel": "Gümüş, sezgisel bilgeliği ve duygusal dengeyi simgeler."
+  },
+  "kitap": {
+    "pozitif": "Bilgi, öğrenme, hikaye",
+    "negatif": "Geçmişte takılma, eski bilgiler",
+    "genel": "Kitap, bilginizi, hayat hikayenizi ve öğrenme sürecinizi temsil eder."
+  },
+  "yazı": {
+    "pozitif": "İletişim, kayıt, ifade",
+    "negatif": "Okunmayan mesajlar, anlaşılmama",
+    "genel": "Yazı, iletmek istediğiniz mesajları ve ifade ihtiyacınızı simgeler."
+  },
+  "resim": {
+    "pozitif": "Anılar, yaratıcılık, perspektif",
+    "negatif": "Geçmişe takılma, donmuş an",
+    "genel": "Resim, anılarınızı ve hayatınıza bakış açınızı temsil eder."
+  },
+  "müzik": {
+    "pozitif": "Harmoni, ifade, duygu",
+    "negatif": "Uyumsuzluk, kaos",
+    "genel": "Müzik, duygusal durumunuzu ve yaşamınızdaki uyumu yansıtır."
+  },
+  "cami": {
+    "pozitif": "Maneviyat, huzur, topluluk",
+    "negatif": "Din baskısı, suçluluk",
+    "genel": "Cami, manevi arayışınızı ve inanç sisteminizi temsil eder."
+  },
+  "namaz": {
+    "pozitif": "İç huzur, disiplin, bağlılık",
+    "negatif": "Görev yükü, mecburiyet hissi",
+    "genel": "Namaz, manevi pratiğinizi ve kendinizle bağlantınızı simgeler."
+  },
+  "bayrak": {
+    "pozitif": "Aidiyet, gurur, kimlik",
+    "negatif": "Aşırı milliyetçilik, çatışma",
+    "genel": "Bayrak, ulusal kimliğinizi ve toplumsal bağlarınızı temsil eder."
+  },
+  "nazar boncuğu": {
+    "pozitif": "Koruma, güvenlik, inanç",
+    "negatif": "Batıl inanç, güvensizlik",
+    "genel": "Nazar boncuğu, korunma ihtiyacınızı ve kötülükten sakınma arzunuzu simgeler."
+  },
+  "ekmek": {
+    "pozitif": "Bereket, bolluk, temel ihtiyaçlar",
+    "negatif": "Kıtlık korkusu, yoksulluk",
+    "genel": "Ekmek, hayatın temellerini, nafakayı ve bereketi temsil eder."
+  },
+  "çay": {
+    "pozitif": "Misafirperverlik, sohbet, rahatlama",
+    "negatif": "Yüzeysel ilişkiler, dedikodu",
+    "genel": "Çay, sosyal bağlarınızı ve rahatlamanızı simgeler."
+  },
+  "kahve": {
+    "pozitif": "Fal, gelecek, sosyalleşme",
+    "negatif": "Belirsizlik, merak",
+    "genel": "Kahve, geleceğe dair merakınızı ve sosyal ritüellerinizi temsil eder."
+  },
+  "hamam": {
+    "pozitif": "Temizlenme, arınma, yenilenme",
+    "negatif": "Mahrem alan, savunmasızlık",
+    "genel": "Hamam, fiziksel ve ruhsal temizlenme ihtiyacınızı simgeler."
+  },
+  "halı": {
+    "pozitif": "Konfor, gelenek, aile mirası",
+    "negatif": "Geçmişe bağlılık, eski değerler",
+    "genel": "Halı, kültürel köklerinizi ve aile mirasınızı temsil eder."
+  },
+  "yemek": {
+    "pozitif": "Beslenme, paylaşım, sevgi",
+    "negatif": "Aşırı tüketim, duygusal yeme",
+    "genel": "Yemek, temel ihtiyaçlarınızı ve sevgi dolu ilişkileri simgeler."
+  },
+  "düğün": {
+    "pozitif": "Birleşme, kutlama, yeni başlangıç",
+    "negatif": "Baskı, toplumsal beklentiler",
+    "genel": "Düğün, birleşmeyi, taahhütleri ve sosyal törenleri temsil eder."
+  },
+  "cenaze": {
+    "pozitif": "Veda, kabul, değişim",
+    "negatif": "Kayıp, hüzün, son",
+    "genel": "Cenaze, bir dönemin sonunu ve vedalaşmayı simgeler."
+  },
+  "asker": {
+    "pozitif": "Disiplin, hizmet, görev",
+    "negatif": "Zorunluluk, özgürlük kaybı",
+    "genel": "Asker, görev bilincinizi ve otoriteyle ilişkinizi temsil eder."
+  },
+  "öğretmen": {
+    "pozitif": "Rehberlik, bilgi, öğrenme",
+    "negatif": "Otorite, eleştiri, yetersizlik",
+    "genel": "Öğretmen, hayat derslerinizi ve rehberlik ihtiyacınızı simgeler."
+  },
+  "anne": {
+    "pozitif": "Sevgi, bakım, koruma",
+    "negatif": "Bağımlılık, aşırı kontrol",
+    "genel": "Anne, besleyen enerjinizi ve duygusal güvenliğinizi temsil eder."
+  },
+  "baba": {
+    "pozitif": "Güç, rehberlik, koruma",
+    "negatif": "Otorite, baskı, onaylanmama",
+    "genel": "Baba, otoriteyi, rehberliği ve erkeksi enerjiyi simgeler."
+  },
+  "kardeş": {
+    "pozitif": "Dayanışma, rekabet, aile",
+    "negatif": "Kıskançlık, çatışma",
+    "genel": "Kardeş, eşit ilişkileri ve rekabeti temsil eder."
+  },
+  "dede": {
+    "pozitif": "Bilgelik, gelenek, kökler",
+    "negatif": "Eski zaman, geçmişte kalma",
+    "genel": "Dede, atalarınızı, bilgeliği ve gelenekleri simgeler."
+  },
+  "nine": {
+    "pozitif": "Şefkat, hikmetli öğütler, sıcaklık",
+    "negatif": "Geçmiş, eski inançlar",
+    "genel": "Nine, kadınsı bilgeliği ve aile geleneklerini temsil eder."
+  },
+  "çocuk": {
+    "pozitif": "Masumiyet, yeni başlangıç, saflık",
+    "negatif": "Olgunlaşmama, sorumluluktan kaçış",
+    "genel": "Çocuk, içinizdeki masum yönleri ve yeni potansiyelleri simgeler."
+  },
+  "yaşlı": {
+    "pozitif": "Bilgelik, deneyim, olgunluk",
+    "negatif": "Yaşlanma korkusu, zayıflama",
+    "genel": "Yaşlı insan, zamana ve deneyime saygıyı temsil eder."
+  },
+  "imam": {
+    "pozitif": "Manevi rehberlik, otorite, inanç",
+    "negatif": "Dogmatizm, yargılama",
+    "genel": "İmam, dini otoriteyi ve manevi rehberliği simgeler."
+  },
+  "şeytan": {
+    "pozitif": "Gölge yönler, yasak arzular",
+    "negatif": "Kötülük, baştan çıkarma, günah",
+    "genel": "Şeytan, karanlık yönlerinizi ve yasak arzularınızı temsil eder."
+  },
+  "melek": {
+    "pozitif": "Koruma, saflık, ilahi mesaj",
+    "negatif": "Ulaşılmazlık, idealizm",
+    "genel": "Melek, yüksek benliğinizi ve manevi korumayı simgeler."
+  },
+  "cin": {
+    "pozitif": "Görünmeyen güçler, sezgi",
+    "negatif": "Korku, paranormal endişe",
+    "genel": "Cin, bilinmeyeni ve görünmeyen etkileri temsil eder."
+  },
+  "kılıç": {
+    "pozitif": "Güç, adalet, keskin karar",
+    "negatif": "Şiddet, çatışma, yıkım",
+    "genel": "Kılıç, gücünüzü, adaletinizi ve keskin kararlarınızı simgeler."
+  },
+  "zincir": {
+    "pozitif": "Bağlantı, güvenlik",
+    "negatif": "Esaret, kısıtlama, bağımlılık",
+    "genel": "Zincir, sizi kısıtlayan durumları veya bağları temsil eder."
+  },
+  "kuran": {
+    "pozitif": "Rehberlik, manevi destek, bilgelik",
+    "negatif": "Dogma, katı kurallar",
+    "genel": "Kuran, manevi rehberliğinizi ve inancınızı simgeler."
+  },
+  "tespih": {
+    "pozitif": "Sabır, dua, hatırlatma",
+    "negatif": "Tekrar, monotonluk",
+    "genel": "Tespih, manevi pratiğinizi ve sabrınızı temsil eder."
+  },
+  "minare": {
+    "pozitif": "Çağrı, yükseliş, topluluk",
+    "negatif": "Baskı, zorunluluk",
+    "genel": "Minare, manevi çağrınızı ve topluluğunuzu simgeler."
+  },
+  "kuyu": {
+    "pozitif": "İç kaynak, derinlik, keşif",
+    "negatif": "Tuzak, kaybolma, karanlık",
+    "genel": "Kuyu, bilinçaltınızın derinliklerini ve gizli kaynaklarınızı temsil eder."
+  },
+  "pınar": {
+    "pozitif": "Bereket, tazelik, yaşam kaynağı",
+    "negatif": "Kuruma korkusu",
+    "genel": "Pınar, yaşam enerjinizi ve taze başlangıçları simgeler."
+  },
+  "çeşme": {
+    "pozitif": "Bereket, paylaşım, toplumsal fayda",
+    "negatif": "Boşa akma, israf",
+    "genel": "Çeşme, cömertliğinizi ve topluma katkınızı temsil eder."
+  },
+  "hamur": {
+    "pozitif": "Yaratıcılık, şekillendirme, potansiyel",
+    "negatif": "Şekilsizlik, hazır olmama",
+    "genel": "Hamur, şekillendirilebilir doğanızı ve yaratıcılığınızı simgeler."
+  },
+  "kına": {
+    "pozitif": "Tören, geçiş, bereket",
+    "negatif": "Geçici güzellik, gösteriş",
+    "genel": "Kına, geçiş törenleri ve kadınlık enerjisini temsil eder."
+  },
+  "türbe": {
+    "pozitif": "Manevi ziyaret, saygı, bereket",
+    "negatif": "Ölüm, geçmiş",
+    "genel": "Türbe, manevi bağlarınızı ve geçmişle olan ilişkinizi simgeler."
+  },
+  "balık": {
+    "pozitif": "Bolluk, bereket, bilinçaltı",
+    "negatif": "Kaygan durum, tutamama",
+    "genel": "Balık, bilinçaltı içgörülerini ve bolluk enerjisini temsil eder."
+  },
+  "at": {
+    "pozitif": "Güç, özgürlük, soyuluk",
+    "negatif": "Kontrolsüzlük, vahşilik",
+    "genel": "At, gücünüzü, özgürlüğünüzü ve içgüdülerinizi simgeler."
+  },
+  "tavuk": {
+    "pozitif": "Beslenme, yuva, doğurganlık",
+    "negatif": "Korkaklık, küçük düşünme",
+    "genel": "Tavuk, pratik kaynakları ve yuva enerjisini temsil eder."
+  },
+  "koyun": {
+    "pozitif": "Uyum, barış, kurban",
+    "negatif": "Pasiflik, sürü psikolojisi",
+    "genel": "Koyun, uyumu, fedakarlığı ve topluluğa uyumu simgeler."
+  },
+  "deve": {
+    "pozitif": "Dayanıklılık, sabır, yolculuk",
+    "negatif": "Ağır yük, yorgunluk",
+    "genel": "Deve, sabrınızı, dayanıklılığınızı ve uzun yolculukları temsil eder."
+  },
+  "kartal": {
+    "pozitif": "Güç, perspektif, özgürlük",
+    "negatif": "Yalnızlık, yırtıcılık",
+    "genel": "Kartal, yüksek perspektifinizi ve gücünüzü simgeler."
+  },
+  "karga": {
+    "pozitif": "Zeka, adaptasyon",
+    "negatif": "Uğursuzluk, kötü haber",
+    "genel": "Karga, zekayı ve bazen uğursuz haberleri temsil eder."
+  },
+  "arı": {
+    "pozitif": "Çalışkanlık, organizasyon, tatlılık",
+    "negatif": "Aşırı meşguliyet, sokma korkusu",
+    "genel": "Arı, çalışkanlığınızı, organizasyonunuzu ve topluluğu simgeler."
+  },
+  "kelebek": {
+    "pozitif": "Dönüşüm, güzellik, özgürlük",
+    "negatif": "Kısalık, kırılganlık",
+    "genel": "Kelebek, dönüşümünüzü ve ruhsal evriminizi temsil eder."
+  },
+  "örümcek": {
+    "pozitif": "Yaratıcılık, sabır, ağ örme",
+    "negatif": "Tuzak, korku, manipülasyon",
+    "genel": "Örümcek, yaratıcılığınızı ve kurduğunuz ağları simgeler."
+  },
+  "ezan": {
+    "pozitif": "Çağrı, hatırlatma, topluluk",
+    "negatif": "Zorunluluk, baskı",
+    "genel": "Ezan, manevi çağrınızı ve toplumsal ritüelleri temsil eder."
+  },
+  "seccade": {
+    "pozitif": "İbadet, zemin, kutsal alan",
+    "negatif": "Formalite, gösteriş",
+    "genel": "Seccade, kişisel kutsal alanınızı ve manevi pratiğinizi simgeler."
+  },
+  "hurma": {
+    "pozitif": "Bereket, tatlılık, sağlık",
+    "negatif": "Aşırı tatlılık",
+    "genel": "Hurma, bereketı, tatlı ilişkileri ve ruhanı beslemeyi temsil eder."
+  }
+}

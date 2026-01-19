@@ -1,0 +1,9 @@
+# Vercel Backend için .gitignore
+
+node_modules/
+dist/
+.env
+serviceAccount.json
+*.log
+.DS_Store
+.vercel
