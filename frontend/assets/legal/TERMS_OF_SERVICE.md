@@ -105,7 +105,7 @@ Hesabınızı askıya alabilir/silebiliriz:
 
 Sorularınız için:
 
-📧 Email: [email adresiniz]  
+📧 Email: durangezer2004@gmail.com  
 📱 Uygulama içi destek  
 📍 Adres: [Adresiniz (opsiyonel)]
 

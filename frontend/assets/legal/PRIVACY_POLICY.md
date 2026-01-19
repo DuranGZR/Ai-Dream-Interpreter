@@ -85,7 +85,7 @@ Bu politikayı zaman zaman güncelleyebiliriz. Önemli değişiklikler uygulama 
 
 Gizlilik konusunda sorularınız için:
 
-📧 Email: [email adresiniz]  
+📧 Email: durangezer2004@gmail.com  
 📱 Uygulama içi destek
 
 ---

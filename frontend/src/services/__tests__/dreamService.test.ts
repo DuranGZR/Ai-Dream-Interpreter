@@ -9,7 +9,7 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
 }));
 
 // Mock fetch
-global.fetch = jest.fn();
+(globalThis as any).fetch = jest.fn();
 
 describe('DreamService', () => {
     beforeEach(() => {
@@ -54,12 +54,12 @@ describe('DreamService', () => {
                 json: jest.fn().mockResolvedValue({ ...mockDream, id: 'dream-id' }),
             };
 
-            (global.fetch as jest.Mock).mockResolvedValue(mockResponse);
+            ((globalThis as any).fetch as jest.Mock).mockResolvedValue(mockResponse);
 
             const result = await dreamService.saveDream(mockDream);
 
             expect(result).toHaveProperty('id');
-            expect(global.fetch).toHaveBeenCalled();
+            expect((globalThis as any).fetch).toHaveBeenCalled();
         });
     });
 
