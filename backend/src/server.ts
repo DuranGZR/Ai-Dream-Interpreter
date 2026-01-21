@@ -16,7 +16,7 @@ import { AIFactory } from './services/AIProvider';
 import { interpretDream } from './services/dreamInterpreter';
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = parseInt(process.env.PORT || '3001', 10);
 
 // Middleware
 app.use(cors());
@@ -341,8 +341,10 @@ app.get('/health', (req, res) => {
 
 // Server başlatma - Local development için
 if (process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Server running on:`);
+    console.log(`   - Local: http://localhost:${PORT}`);
+    console.log(`   - Network: http://10.62.8.112:${PORT}`);
     console.log(`📊 OpenAI API: ${process.env.OPENAI_API_KEY ? 'Configured ✅' : 'Missing ❌'}`);
     console.log(`🔥 Firebase: ${process.env.FIREBASE_PROJECT_ID ? 'Configured ✅' : 'Missing ❌'}`);
   });

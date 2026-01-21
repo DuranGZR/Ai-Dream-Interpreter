@@ -13,7 +13,7 @@ const getBaseURL = () => {
   }
 
   // Production modda .env'den oku
-  return API_URL || 'https://aiyorumlayici-93e0a05ao-durangzrs-projects.vercel.app';
+  return API_URL || 'https://dream-interpreter-backend-5z7son9xn-durangzrs-projects.vercel.app';
 };
 
 export const API_BASE_URL = getBaseURL();

@@ -171,6 +171,18 @@ class AuthService {
     });
   }
 
+  // Google ile giriş (Stub - Expo native entegrasyonu gerektirir)
+  async loginWithGoogle(): Promise<AuthUser> {
+    // TODO: expo-google-signin veya expo-auth-session ile implement edilecek
+    throw new Error('Google girişi henüz yapılandırılmamış. Email ile giriş yapabilirsiniz.');
+  }
+
+  // Apple ile giriş (Stub - Expo native entegrasyonu gerektirir)
+  async loginWithApple(): Promise<AuthUser> {
+    // TODO: expo-apple-authentication ile implement edilecek
+    throw new Error('Apple girişi henüz yapılandırılmamış. Email ile giriş yapabilirsiniz.');
+  }
+
   // Çıkış yap
   async logout(): Promise<void> {
     try {
