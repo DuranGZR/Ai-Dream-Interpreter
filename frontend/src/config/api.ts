@@ -3,6 +3,12 @@ import Constants from 'expo-constants';
 import { API_URL } from '@env';
 
 const getBaseURL = () => {
+  // Öncelik: .env dosyasındaki API_URL (Vercel Backend)
+  // Eğer .env'de API_URL varsa, Development modunda bile orayı kullanırız.
+  if (API_URL) {
+    return API_URL;
+  }
+
   if (__DEV__) {
     // Expo dev server'dan host IP'sini otomatik al
     const debuggerHost = Constants.expoConfig?.hostUri ??
@@ -23,12 +29,7 @@ const getBaseURL = () => {
     return 'http://localhost:3000';
   }
 
-  // Production: .env'den oku (zorunlu)
-  if (!API_URL) {
-    console.error('❌ API_URL environment variable is required for production!');
-    throw new Error('API_URL not configured. Please set API_URL in .env or EAS Secrets.');
-  }
-  return API_URL;
+  throw new Error('API_URL not configured. Please set API_URL in .env or EAS Secrets.');
 };
 
 export const API_BASE_URL = getBaseURL();
