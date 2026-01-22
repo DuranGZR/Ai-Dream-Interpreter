@@ -36,3 +36,9 @@ Thumbs.db
 *.p12
 *.key
 *.mobileprovision
+
+# Google Service Account (Play Store)
+google-service-account.json
+
+# Sensitive scripts (if accidentally contains secrets)
+*.secrets.ps1

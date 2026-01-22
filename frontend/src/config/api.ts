@@ -3,17 +3,32 @@ import Constants from 'expo-constants';
 import { API_URL } from '@env';
 
 const getBaseURL = () => {
-  // Development modda local backend kullan
   if (__DEV__) {
+    // Expo dev server'dan host IP'sini otomatik al
+    const debuggerHost = Constants.expoConfig?.hostUri ??
+      (Constants.manifest as any)?.debuggerHost;
+    const hostIP = debuggerHost?.split(':')[0];
+
     if (Platform.OS === 'android') {
-      return 'http://10.0.2.2:3000';  // Android Emulator için
+      // Android Emulator için özel localhost adresi
+      return 'http://10.0.2.2:3000';
     }
-    // iOS fiziksel cihaz veya simulator için bilgisayarın IP'si
-    return 'http://10.62.8.112:3000'; // Bilgisayarın local IP adresi
+
+    // iOS/fiziksel cihaz: Expo'nun algıladığı IP'yi kullan
+    if (hostIP) {
+      return `http://${hostIP}:3000`;
+    }
+
+    // Fallback: localhost
+    return 'http://localhost:3000';
   }
 
-  // Production modda .env'den oku
-  return API_URL || 'https://dream-interpreter-backend-5z7son9xn-durangzrs-projects.vercel.app';
+  // Production: .env'den oku (zorunlu)
+  if (!API_URL) {
+    console.error('❌ API_URL environment variable is required for production!');
+    throw new Error('API_URL not configured. Please set API_URL in .env or EAS Secrets.');
+  }
+  return API_URL;
 };
 
 export const API_BASE_URL = getBaseURL();

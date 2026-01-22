@@ -28,8 +28,11 @@
       },
       "package": "com.dreaminterpreter.app",
       "permissions": [
+        "INTERNET",
         "RECORD_AUDIO",
-        "NOTIFICATIONS"
+        "VIBRATE",
+        "RECEIVE_BOOT_COMPLETED",
+        "android.permission.SCHEDULE_EXACT_ALARM"
       ],
       "versionCode": 1
     },
@@ -50,7 +53,21 @@
     "plugins": [
       "expo-font",
       "expo-web-browser",
-      "expo-notifications"
-    ]
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#7c4dff"
+        }
+      ]
+    ],
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/f48bcffe-3a26-4027-a23b-c00af9d35399",
+      "enabled": true,
+      "fallbackToCacheTimeout": 30000
+    }
   }
 }
