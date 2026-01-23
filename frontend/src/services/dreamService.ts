@@ -164,6 +164,27 @@ class DreamService {
     }
   }
 
+  // Favori durumunu güncelle
+  async toggleFavorite(dreamId: string, isFavorite: boolean): Promise<void> {
+    try {
+      const response = await fetch(`${API_ENDPOINTS.dreams}/${dreamId}/favorite`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ isFavorite }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      console.log('✅ Favori durumu güncellendi');
+    } catch (error) {
+      console.error('❌ Favori güncellenemedi:', error);
+      throw error;
+    }
+  }
+
   // Rüya sil
   async deleteDream(dreamId: string, userId: string): Promise<void> {
     try {

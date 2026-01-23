@@ -124,11 +124,13 @@ export default function HistoryScreen() {
         const newLocal = localDreams.map(d => d.id === id ? { ...d, isFavorite: !currentFavorite } : d);
         await dreamService['saveLocalDreams'](newLocal);
       } else {
-        // TODO: Backend implementation
+        // Backend update
+        await dreamService.toggleFavorite(id, !currentFavorite);
       }
       Analytics.logFavoriteToggled(id, !currentFavorite);
     } catch (error) {
       // Revert on error
+      console.error('Favori güncelleme hatası:', error);
       fetchDreams();
     }
   };

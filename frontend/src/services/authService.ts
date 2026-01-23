@@ -171,16 +171,16 @@ class AuthService {
     });
   }
 
-  // Google ile giriş (Stub - Expo native entegrasyonu gerektirir)
+  // Google ile giriş (Stub - AuthContext kullanır)
   async loginWithGoogle(): Promise<AuthUser> {
-    // TODO: expo-google-signin veya expo-auth-session ile implement edilecek
-    throw new Error('Google girişi henüz yapılandırılmamış. Email ile giriş yapabilirsiniz.');
+    console.warn('⚠️ authService.loginWithGoogle is deprecated, use AuthContext instead.');
+    throw new Error('Use AuthContext for Google Login');
   }
 
-  // Apple ile giriş (Stub - Expo native entegrasyonu gerektirir)
+  // Apple ile giriş (Stub - AuthContext kullanır)
   async loginWithApple(): Promise<AuthUser> {
-    // TODO: expo-apple-authentication ile implement edilecek
-    throw new Error('Apple girişi henüz yapılandırılmamış. Email ile giriş yapabilirsiniz.');
+    console.warn('⚠️ authService.loginWithApple is deprecated, use AuthContext instead.');
+    throw new Error('Use AuthContext for Apple Login');
   }
 
   // Çıkış yap

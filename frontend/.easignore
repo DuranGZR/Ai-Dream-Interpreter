@@ -1,0 +1,11 @@
+# .easignore
+# EAS Build uses this file to determine what to upload to the build server.
+# By default, it follows .gitignore.
+# We want to force-include google-services.json even though it is git-ignored for security.
+
+# Inherit directly from .gitignore
+# (No explicit include needed if we don't start with excluding everything, 
+# BUT wait, EAS respects gitignore. So if it is in gitignore, EAS ignores it too.)
+# To include a file that is in .gitignore, we must negate it here.
+
+!google-services.json
