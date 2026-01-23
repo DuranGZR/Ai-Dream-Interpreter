@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { Text } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
-// @ts-ignore
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useTheme } from '../context/ThemeContext';
@@ -32,16 +31,10 @@ LocaleConfig.defaultLocale = 'tr';
 const { width } = Dimensions.get('window');
 
 // 🌌 COSMIC PURPLE THEME
-const THEME = {
-  background: ['#050505', '#120E16', '#1A1520'] as const,
-  primary: '#9B30FF',
-  secondary: '#7B2CBF',
-  accent: '#E0AAFF',
-  text: '#FFFFFF',
-  textMuted: '#9CA3AF',
-  cardBg: 'rgba(255, 255, 255, 0.05)',
-  glow: 'rgba(155, 48, 255, 0.6)',
-};
+// 🌌 COSMIC PURPLE THEME (Shared)
+import { COSMIC_THEME } from '../theme/theme';
+
+const THEME = COSMIC_THEME;
 
 export default function CalendarScreen() {
   const { colors } = useTheme();

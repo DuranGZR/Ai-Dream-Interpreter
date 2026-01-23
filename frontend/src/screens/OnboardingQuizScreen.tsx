@@ -63,11 +63,9 @@ export default function OnboardingQuizScreen() {
 
         await updateProfile({ persona: winner });
 
-        // @ts-ignore
         navigation.reset({
             index: 0,
-            // @ts-ignore
-            routes: [{ name: 'MainTabs' }],
+            routes: [{ name: 'MainTabs' as any }],
         });
     };
 

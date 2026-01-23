@@ -13,18 +13,10 @@ import { BlurView } from 'expo-blur';
 const { width } = Dimensions.get('window');
 
 // 🌌 COSMIC PURPLE THEME (Shared)
-const THEME = {
-  background: ['#050505', '#120E16', '#1A1520'] as const,
-  primary: '#9B30FF',
-  secondary: '#7B2CBF',
-  accent: '#E0AAFF',
-  text: '#FFFFFF',
-  textMuted: '#9CA3AF',
-  cardBg: 'rgba(255, 255, 255, 0.05)',
-  glow: 'rgba(155, 48, 255, 0.6)',
-  gold: '#F59E0B',
-  success: '#10B981',
-};
+import { COSMIC_THEME } from '../theme/theme';
+
+// 🌌 COSMIC PURPLE THEME (Shared)
+const THEME = COSMIC_THEME;
 
 // Typewriter Hook - daha hızlı!
 function useTypewriter(text: string, speed: number = 8, enabled: boolean = true) {
@@ -190,8 +182,7 @@ export default function ResultScreen() {
         setSnackbarMessage('Rüya günlüğüne kaydedildi');
         setSnackbarVisible(true);
         setTimeout(() => {
-          // @ts-ignore
-          navigation.navigate('History');
+          navigation.navigate('MainTabs', { screen: 'History' });
         }, 1500);
       } else {
         throw new Error('Kaydetme başarısız');

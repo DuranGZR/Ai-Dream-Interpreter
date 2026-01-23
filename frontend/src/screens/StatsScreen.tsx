@@ -6,7 +6,6 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { API_ENDPOINTS } from '../config/api';
-// @ts-ignore
 import Svg, { Rect, Text as SvgText, Line, G } from 'react-native-svg';
 import { Feather } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
@@ -14,18 +13,10 @@ import { BlurView } from 'expo-blur';
 const { width } = Dimensions.get('window');
 
 // 🌌 COSMIC PURPLE THEME (Shared)
-const THEME = {
-  background: ['#050505', '#120E16', '#1A1520'] as const,
-  primary: '#9B30FF',
-  secondary: '#7B2CBF',
-  accent: '#E0AAFF',
-  text: '#FFFFFF',
-  textMuted: '#9CA3AF',
-  cardBg: 'rgba(255, 255, 255, 0.05)',
-  glow: 'rgba(155, 48, 255, 0.6)',
-  gold: '#F59E0B',
-  success: '#10B981',
-};
+// 🌌 COSMIC PURPLE THEME (Shared)
+import { COSMIC_THEME } from '../theme/theme';
+
+const THEME = COSMIC_THEME;
 
 export default function StatsScreen() {
   const { user } = useAuth();

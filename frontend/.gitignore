@@ -39,6 +39,7 @@ Thumbs.db
 
 # Google Service Account (Play Store)
 google-service-account.json
+google-services.json
 
 # Sensitive scripts (if accidentally contains secrets)
 *.secrets.ps1

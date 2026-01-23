@@ -141,3 +141,25 @@ export const commonStyles = {
     elevation: 1,
   },
 };
+
+// 🌌 COSMIC PURPLE THEME (Global Shared Theme)
+export const COSMIC_THEME = {
+  primary: '#9B30FF',
+  secondary: '#7B2CBF',
+  accent: '#E0AAFF',
+  background: ['#050505', '#120E16', '#1A1520'] as const,
+  card: 'rgba(30, 20, 50, 0.9)',
+  cardBg: 'rgba(255, 255, 255, 0.05)',
+  text: '#FFFFFF',
+  textMuted: '#9CA3AF',
+  glass: 'rgba(255, 255, 255, 0.05)',
+  border: 'rgba(138, 43, 226, 0.3)',
+  glow: 'rgba(155, 48, 255, 0.6)',
+  placeholder: 'rgba(255,255,255,0.4)',
+  gold: '#F59E0B',
+  danger: '#ff5252',
+  success: '#10B981',
+  error: '#EF4444',
+  warning: '#F59E0B',
+  info: '#3B82F6',
+};

@@ -17,16 +17,10 @@ import { getMoonPhase } from '../utils/moonPhase';
 const { width } = Dimensions.get('window');
 
 // 🌌 COSMIC PURPLE THEME (Shared with Calendar)
-const THEME = {
-  background: ['#050505', '#120E16', '#1A1520'] as const,
-  primary: '#9B30FF',
-  secondary: '#7B2CBF',
-  accent: '#E0AAFF',
-  text: '#FFFFFF',
-  textMuted: '#9CA3AF',
-  cardBg: 'rgba(255, 255, 255, 0.05)',
-  glow: 'rgba(155, 48, 255, 0.6)',
-};
+import { COSMIC_THEME } from '../theme/theme';
+
+// 🌌 COSMIC PURPLE THEME (Shared)
+const THEME = COSMIC_THEME;
 
 export default function HomeScreen() {
   const { user, loading: authLoading } = useAuth();
@@ -274,7 +268,8 @@ export default function HomeScreen() {
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const result = await response.json();
 
-      // @ts-ignore
+
+
       navigation.navigate('Result', { ...result, dreamText });
       setDreamText('');
     } catch (error: any) {

@@ -16,17 +16,10 @@ import { Feather } from '@expo/vector-icons';
 const { width } = Dimensions.get('window');
 
 // 🌌 COSMIC PURPLE THEME
-const THEME = {
-    primary: '#9B30FF',
-    secondary: '#7B2CBF',
-    accent: '#E0AAFF',
-    text: '#FFFFFF',
-    textMuted: '#9CA3AF',
-    success: '#10B981',
-    error: '#EF4444',
-    warning: '#F59E0B',
-    info: '#3B82F6',
-};
+// 🌌 COSMIC PURPLE THEME (Shared)
+import { COSMIC_THEME } from '../theme/theme';
+
+const THEME = COSMIC_THEME;
 
 export type AlertType = 'success' | 'error' | 'warning' | 'info' | 'default';
 

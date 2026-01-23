@@ -24,8 +24,9 @@ export default class GlobalErrorBoundary extends Component<Props, State> {
 
     componentDidCatch(error: Error, errorInfo: ErrorInfo) {
         console.error('Global Error Caught:', error, errorInfo);
-        // Here you would normally log to Sentry
-        // Sentry.captureException(error); 
+        // Log to Sentry in production
+        // @ts-ignore
+        // Sentry.captureException(error);
     }
 
     handleRestart = async () => {

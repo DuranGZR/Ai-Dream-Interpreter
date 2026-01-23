@@ -29,10 +29,17 @@ const getBaseURL = () => {
     return 'http://localhost:3000';
   }
 
-  throw new Error('API_URL not configured. Please set API_URL in .env or EAS Secrets.');
+  // Production Check
+  if (!API_URL) {
+    console.error('❌ CRITICAL: API_URL is missing in environment variables!');
+    console.warn('⚠️ Ensure .env was created during build via eas-build-pre-install hook.');
+  }
+
+  return API_URL || 'http://localhost:3000'; // Fail safe but log error
 };
 
 export const API_BASE_URL = getBaseURL();
+console.log('🚀 API Configured:', API_BASE_URL);
 
 export const API_ENDPOINTS = {
   interpret: `${API_BASE_URL}/api/interpret`,

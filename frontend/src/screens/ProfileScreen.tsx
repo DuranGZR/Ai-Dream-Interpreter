@@ -19,26 +19,16 @@ import { useLanguage } from '../context/LanguageContext';
 import { NotificationService } from '../services/NotificationService';
 import { Analytics } from '../services/AnalyticsService';
 import { API_ENDPOINTS } from '../config/api';
-// ImagePicker removed
 import { Feather } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomAlert, { AlertButton, AlertType } from '../components/CustomAlert';
 
 // 🌌 COSMIC PURPLE THEME (Shared)
-const THEME = {
-  background: ['#050505', '#120E16', '#1A1520'] as const,
-  primary: '#9B30FF',
-  secondary: '#7B2CBF',
-  accent: '#E0AAFF',
-  text: '#FFFFFF',
-  textMuted: '#9CA3AF',
-  cardBg: 'rgba(255, 255, 255, 0.05)',
-  glow: 'rgba(155, 48, 255, 0.6)',
-  gold: '#F59E0B',
-  danger: '#ff5252',
-  success: '#10B981',
-};
+import { COSMIC_THEME } from '../theme/theme';
+
+// 🌌 COSMIC PURPLE THEME (Shared)
+const THEME = COSMIC_THEME;
 
 export default function ProfileScreen() {
   const { user, logout, updateProfile, resetPassword } = useAuth();
@@ -328,7 +318,6 @@ export default function ProfileScreen() {
             <TouchableOpacity
               style={styles.settingRow}
               onPress={() => {
-                // @ts-ignore
                 navigation.navigate('OnboardingQuiz');
               }}
             >
@@ -545,7 +534,7 @@ export default function ProfileScreen() {
         buttons={alertConfig.buttons}
         onClose={hideAlert}
       />
-    </View>
+    </View >
   );
 }
 

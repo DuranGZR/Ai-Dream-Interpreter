@@ -59,14 +59,10 @@ initSentry();
 SplashScreen.preventAutoHideAsync();
 
 // 🌌 COSMIC PURPLE THEME (Shared)
-const THEME = {
-  primary: '#9B30FF',
-  background: '#050505',
-  card: 'rgba(30, 20, 50, 0.9)',
-  text: '#FFFFFF',
-  textMuted: '#9CA3AF',
-  glass: 'rgba(255, 255, 255, 0.05)',
-};
+import { COSMIC_THEME } from './src/theme/theme';
+
+// 🌌 COSMIC PURPLE THEME (Shared)
+const THEME = COSMIC_THEME;
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();

@@ -14,18 +14,10 @@ import CustomAlert, { AlertButton, AlertType } from '../components/CustomAlert';
 const { width } = Dimensions.get('window');
 
 // 🌌 COSMIC PURPLE THEME (Shared)
-const THEME = {
-  background: ['#050505', '#120E16', '#1A1520'] as const,
-  primary: '#9B30FF',
-  secondary: '#7B2CBF',
-  accent: '#E0AAFF',
-  text: '#FFFFFF',
-  textMuted: '#9CA3AF',
-  cardBg: 'rgba(255, 255, 255, 0.05)',
-  glow: 'rgba(155, 48, 255, 0.6)',
-  danger: '#EF4444',
-  gold: '#F59E0B'
-};
+// 🌌 COSMIC PURPLE THEME (Shared)
+import { COSMIC_THEME } from '../theme/theme';
+
+const THEME = COSMIC_THEME;
 
 export default function HistoryScreen() {
   const navigation = useNavigation();

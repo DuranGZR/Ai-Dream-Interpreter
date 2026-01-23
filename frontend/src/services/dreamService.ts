@@ -15,11 +15,17 @@ export interface Dream {
   isLocal?: boolean; // Misafir modunda local kayıt
 }
 
+export interface InterpretationResponse {
+  interpretation: string;
+  energy: number;
+  symbols: Array<{ name: string; meaning: string; }>;
+}
+
 const DREAMS_STORAGE_KEY = '@dreams_storage';
 
 class DreamService {
   // Rüya yorumlama isteği
-  async interpretDream(dreamText: string, userId: string): Promise<any> {
+  async interpretDream(dreamText: string, userId: string): Promise<InterpretationResponse> {
     try {
       console.log('🔮 Rüya yorumlama isteği gönderiliyor...');
       const response = await fetch(API_ENDPOINTS.interpret, {
@@ -39,7 +45,7 @@ class DreamService {
 
       const data = await response.json();
       console.log('✅ Rüya yorumu alındı');
-      return data;
+      return data as InterpretationResponse;
     } catch (error) {
       console.error('❌ Rüya yorumlama hatası:', error);
       throw error;

@@ -332,15 +332,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { id_token } = response.params;
       if (id_token) {
         handleGoogleSignIn(id_token);
+      } else {
+        console.error('❌ Google response error: No ID Token returned', response);
       }
+    } else if (response?.type === 'error') {
+      console.error('❌ Google Auth Request Failed:', response.error);
+      alert('Google bağlantı hatası: ' + (response.error?.code || 'unknown'));
     }
   }, [response]);
 
   const handleGoogleSignIn = async (idToken: string) => {
     try {
       setLoading(true);
+      console.log('🔄 Google authentication processing...', { idTokenLength: idToken?.length });
       const credential = authService.getGoogleCredential(idToken);
       const user = await authService.signInWithCredential(credential);
+
+      console.log('✅ Google Authentication verified with Firebase');
 
       const userData: User = {
         id: user.id,
@@ -354,7 +362,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.log('✅ Google Login successful');
     } catch (error) {
       console.error('❌ Google Login error:', error);
-      alert('Google ile giriş yapılamadı.');
+      if (error.code === 'auth/invalid-credential') {
+        console.error('⚠️ INVALID CREDENTIAL: This usually means the SHA-1 fingerprint in Firebase Console does not match the app signing key.');
+        alert('Google giriş hatası: İmza doğrulanamadı (SHA-1 hatası).');
+      } else {
+        alert('Google ile giriş yapılamadı: ' + (error.message || 'Bilinmeyen hata'));
+      }
     } finally {
       setLoading(false);
     }

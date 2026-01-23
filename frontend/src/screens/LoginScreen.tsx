@@ -11,17 +11,12 @@ import CustomAlert, { AlertType } from '../components/CustomAlert';
 const { width } = Dimensions.get('window');
 
 // 🌌 COSMIC PURPLE THEME (Shared)
-const THEME = {
-  primary: '#9B30FF',
-  background: ['#050505', '#120E16', '#1A1520'] as const,
-  card: 'rgba(30, 20, 50, 0.5)',
-  text: '#FFFFFF',
-  textMuted: '#9CA3AF',
-  glass: 'rgba(255, 255, 255, 0.05)',
-  border: 'rgba(138, 43, 226, 0.3)',
-  glow: 'rgba(155, 48, 255, 0.6)',
-  placeholder: 'rgba(255,255,255,0.4)',
-};
+import { COSMIC_THEME } from '../theme/theme';
+
+
+
+// 🌌 COSMIC PURPLE THEME (Shared)
+const THEME = COSMIC_THEME;
 
 interface LoginScreenProps {
   onLogin: (email: string, password: string) => Promise<void>;

@@ -8,7 +8,8 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "APP_ENV": "development"
+        "APP_ENV": "development",
+        "API_URL": "https://dream-interpreter-backend-abglqoew2-durangzrs-projects.vercel.app"
       }
     },
     "preview": {
@@ -17,7 +18,8 @@
         "buildType": "apk"
       },
       "env": {
-        "APP_ENV": "preview"
+        "APP_ENV": "preview",
+        "API_URL": "https://dream-interpreter-backend-abglqoew2-durangzrs-projects.vercel.app"
       }
     },
     "production": {
@@ -26,7 +28,8 @@
         "buildType": "app-bundle"
       },
       "env": {
-        "APP_ENV": "production"
+        "APP_ENV": "production",
+        "API_URL": "https://dream-interpreter-backend-abglqoew2-durangzrs-projects.vercel.app"
       }
     }
   },

@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// @ts-ignore
 import NetInfo from '@react-native-community/netinfo';
 import { API_ENDPOINTS } from '../config/api';
 

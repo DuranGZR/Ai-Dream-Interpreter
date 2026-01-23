@@ -8,12 +8,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width, height } = Dimensions.get('window');
 
-const THEME = {
-  primary: '#9B30FF',
-  gold: '#FFD700',
-  text: '#FFFFFF',
-  textMuted: 'rgba(255,255,255,0.7)',
-};
+import { COSMIC_THEME } from '../theme/theme';
+
+const THEME = COSMIC_THEME;
 
 interface OnboardingScreenProps {
   onComplete: () => void;
