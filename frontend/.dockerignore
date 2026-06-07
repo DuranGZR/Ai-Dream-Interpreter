@@ -1,0 +1,9 @@
+node_modules
+.expo
+web-build
+dist
+.env
+npm-debug.log
+.git
+.gitignore
+README.md
