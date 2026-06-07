@@ -1,8 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, initializeAuth } from 'firebase/auth';
-// @ts-ignore - React Native persistence
-const { getReactNativePersistence } = require('@firebase/auth/dist/rn/index.js');
+import { Platform } from 'react-native';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import {
@@ -39,19 +38,25 @@ if (!getApps().length) {
 // Auth'u başlat
 let auth;
 try {
-  // Yeni bir auth instance oluştur persistence ile
-  auth = initializeAuth(app, {
-    persistence: getReactNativePersistence(AsyncStorage),
-  });
+  if (Platform.OS === 'web') {
+    auth = getAuth(app);
+    console.log('✅ Firebase Auth initialized for Web');
+  } else {
+    // @ts-ignore - React Native persistence
+    const { getReactNativePersistence } = require('@firebase/auth/dist/rn/index.js');
+    // Yeni bir auth instance oluştur persistence ile
+    auth = initializeAuth(app, {
+      persistence: getReactNativePersistence(AsyncStorage),
+    });
+    console.log('✅ Firebase Auth initialized with AsyncStorage persistence');
+  }
 
   // React Native için network timeout ayarlarını artır
   // @ts-ignore - Firebase internal API
-  if (auth._getSettings) {
+  if (auth && '_getSettings' in auth) {
     // @ts-ignore
     auth._getSettings().appVerificationDisabledForTesting = false;
   }
-
-  console.log('✅ Firebase Auth initialized with AsyncStorage persistence');
 } catch (error: any) {
   // Eğer auth zaten varsa (hot reload), mevcut instance'ı kullan
   if (error.code === 'auth/already-initialized') {

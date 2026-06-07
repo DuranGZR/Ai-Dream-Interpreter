@@ -3,10 +3,10 @@ import { View, StyleSheet, ScrollView, Animated, TouchableOpacity, Dimensions, V
 import { Text, Snackbar, ActivityIndicator } from 'react-native-paper';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { API_ENDPOINTS } from '../config/api';
 import { ShareService } from '../services/ShareService';
 import { Analytics } from '../services/AnalyticsService';
 import { useAuth } from '../context/AuthContext';
+import dreamService from '../services/dreamService';
 import { Feather } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 
@@ -162,31 +162,22 @@ export default function ResultScreen() {
 
     setLoading(true);
     try {
-      const response = await fetch(API_ENDPOINTS.dreams, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: user.id,
-          dreamText,
-          interpretation,
-          energy,
-          symbols,
-          date: new Date().toISOString(),
-        }),
+      const savedDream = await dreamService.saveDream({
+        userId: user.id,
+        dreamText,
+        interpretation,
+        energy,
+        symbols,
+        date: new Date().toISOString(),
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        Vibration.vibrate(50);
-        Analytics.logDreamSaved(data.id, energy);
-        setSnackbarMessage('Rüya günlüğüne kaydedildi');
-        setSnackbarVisible(true);
-        setTimeout(() => {
-          navigation.navigate('MainTabs', { screen: 'History' });
-        }, 1500);
-      } else {
-        throw new Error('Kaydetme başarısız');
-      }
+      Vibration.vibrate(50);
+      Analytics.logDreamSaved(savedDream.id, energy);
+      setSnackbarMessage('Rüya günlüğüne kaydedildi');
+      setSnackbarVisible(true);
+      setTimeout(() => {
+        navigation.navigate('MainTabs', { screen: 'History' });
+      }, 1500);
     } catch (error) {
       setSnackbarMessage('Bir hata oluştu');
       setSnackbarVisible(true);

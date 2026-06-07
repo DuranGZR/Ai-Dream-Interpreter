@@ -200,6 +200,13 @@ class AuthService {
     return this.currentUser;
   }
 
+  async getIdToken(forceRefresh = false): Promise<string | null> {
+    const firebaseUser = auth.currentUser;
+    if (!firebaseUser) return null;
+
+    return firebaseUser.getIdToken(forceRefresh);
+  }
+
   // Kullanıcıyı yükle (Firebase Auth + Firestore'dan)
   async loadUser(): Promise<AuthUser | null> {
     try {

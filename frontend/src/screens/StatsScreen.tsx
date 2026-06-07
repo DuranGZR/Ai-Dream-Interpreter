@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
-import { API_ENDPOINTS } from '../config/api';
+import dreamService from '../services/dreamService';
 import Svg, { Rect, Text as SvgText, Line, G } from 'react-native-svg';
 import { Feather } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
@@ -49,8 +49,7 @@ export default function StatsScreen() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_ENDPOINTS.dreams}?userId=${user.id}`);
-      const dreams = await response.json();
+      const dreams = await dreamService.getDreams(user.id);
 
       if (!Array.isArray(dreams)) {
         console.log('Veri formatı hatalı');

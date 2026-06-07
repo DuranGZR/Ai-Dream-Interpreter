@@ -11,8 +11,56 @@ jest.mock('@react-native-async-storage/async-storage', () =>
 // Mock authService
 jest.mock('../src/services/authService', () => ({
     loginWithEmail: jest.fn(() => Promise.resolve({ id: '123', email: 'test@example.com' })),
+    signUpWithEmail: jest.fn(),
     logout: jest.fn(() => Promise.resolve()),
     loadUser: jest.fn(() => Promise.resolve(null)),
+    getGoogleCredential: jest.fn(),
+    getOAuthCredential: jest.fn(),
+    signInWithCredential: jest.fn(),
+    sendPasswordResetEmail: jest.fn(),
+}));
+
+jest.mock('../src/services/dreamService', () => ({
+    __esModule: true,
+    default: {
+        getLocalDreams: jest.fn(() => Promise.resolve([])),
+        saveDream: jest.fn(),
+    },
+}));
+
+jest.mock('../src/config/firebase', () => ({
+    auth: { currentUser: null },
+    db: {},
+}));
+
+jest.mock('firebase/auth', () => ({
+    onAuthStateChanged: jest.fn((_auth, callback) => {
+        callback(null);
+        return jest.fn();
+    }),
+    updateProfile: jest.fn(),
+}));
+
+jest.mock('firebase/firestore', () => ({
+    doc: jest.fn(),
+    getDoc: jest.fn(),
+    setDoc: jest.fn(),
+}));
+
+jest.mock('expo-auth-session/providers/google', () => ({
+    useAuthRequest: jest.fn(() => [null, null, jest.fn()]),
+}));
+
+jest.mock('expo-auth-session', () => ({
+    ResponseType: { IdToken: 'id_token' },
+}));
+
+jest.mock('expo-apple-authentication', () => ({
+    AppleAuthenticationScope: {
+        FULL_NAME: 'FULL_NAME',
+        EMAIL: 'EMAIL',
+    },
+    signInAsync: jest.fn(),
 }));
 
 // Test Component

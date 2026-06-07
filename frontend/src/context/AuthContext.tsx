@@ -4,11 +4,15 @@ import authService from '../services/authService';
 import * as Google from 'expo-auth-session/providers/google';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { ResponseType } from 'expo-auth-session';
+import { onAuthStateChanged, updateProfile as updateFirebaseProfile } from 'firebase/auth';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import {
   GOOGLE_IOS_CLIENT_ID,
   GOOGLE_ANDROID_CLIENT_ID,
   GOOGLE_WEB_CLIENT_ID,
 } from '@env';
+import { auth, db } from '../config/firebase';
+import dreamService from '../services/dreamService';
 
 interface User {
   id: string;
@@ -56,9 +60,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Firebase Auth state listener
     const initAuth = async () => {
-      const { onAuthStateChanged } = await import('firebase/auth');
-      const { auth } = await import('../config/firebase');
-
       const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
         if (firebaseUser) {
           console.log('🔥 Firebase Auth state changed: User logged in', firebaseUser.email);
@@ -93,9 +94,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const loadUserProfile = async (firebaseUser: any) => {
     try {
-      const { doc, getDoc } = await import('firebase/firestore');
-      const { db } = await import('../config/firebase');
-
       const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
 
       if (userDoc.exists()) {
@@ -151,9 +149,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         // Firestore'dan detaylı profil bilgilerini yükle
         try {
-          const { doc, getDoc } = await import('firebase/firestore');
-          const { db } = await import('../config/firebase');
-
           const userDoc = await getDoc(doc(db, 'users', currentUser.id));
 
           if (userDoc.exists()) {
@@ -226,20 +221,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // 🔄 Guest Dream Migration Helper
   const migrateGuestDreams = async (newUserId: string) => {
     try {
-      const dreamService = (await import('../services/dreamService')).default;
       const guestDreams = await dreamService.getLocalDreams();
 
       if (guestDreams.length > 0) {
         console.log(`📦 Migrating ${guestDreams.length} guest dreams to user account...`);
 
         for (const dream of guestDreams) {
+          if (!dream.interpretation) continue;
+
           // Update userId and save to backend
           await dreamService.saveDream({
             userId: newUserId,
-            content: dream.content,
+            dreamText: dream.dreamText,
             interpretation: dream.interpretation,
+            energy: dream.energy ?? 50,
             symbols: dream.symbols,
-            sentiment: dream.sentiment,
+            date: dream.date,
           });
         }
 
@@ -473,11 +470,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       // 2. Firestore'a kaydet (kalıcı storage)
       if (!user.id.startsWith('guest-')) {
-        const { doc, setDoc } = await import('firebase/firestore');
-        const { db } = await import('../config/firebase');
-        const { updateProfile: updateFirebaseProfile } = await import('firebase/auth');
-        const { auth } = await import('../config/firebase');
-
         try {
           // Undefined değerleri temizle - Firestore kabul etmiyor
           const firestoreData: any = {

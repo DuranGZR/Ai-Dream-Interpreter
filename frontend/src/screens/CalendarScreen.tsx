@@ -6,6 +6,7 @@ import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useTheme } from '../context/ThemeContext';
 import { API_ENDPOINTS } from '../config/api';
+import dreamService from '../services/dreamService';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { Feather } from '@expo/vector-icons';
@@ -71,12 +72,12 @@ export default function CalendarScreen() {
     if (!user) return;
 
     try {
-      const response = await fetch(`${API_ENDPOINTS.dreams}?userId=${user.id}`);
-      const dreams = await response.json();
-      setAllDreamsDisplay(dreams); // Store all dreams
+      const dreams = await dreamService.getDreams(user.id);
+      const dreamsArray = Array.isArray(dreams) ? dreams : [];
+      setAllDreamsDisplay(dreamsArray); // Store all dreams
 
       const marked: any = {};
-      dreams.forEach((dream: any) => {
+      dreamsArray.forEach((dream: any) => {
         const date = new Date(dream.date).toISOString().split('T')[0];
         marked[date] = {
           customStyles: {

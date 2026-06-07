@@ -3,39 +3,38 @@ import Constants from 'expo-constants';
 import { API_URL } from '@env';
 
 const getBaseURL = () => {
-  // Öncelik: .env dosyasındaki API_URL (Vercel Backend)
-  // Eğer .env'de API_URL varsa, Development modunda bile orayı kullanırız.
-  if (API_URL) {
-    return API_URL;
-  }
-
   if (__DEV__) {
-    // Expo dev server'dan host IP'sini otomatik al
+    // Web development should target localhost:3000
+    if (Platform.OS === 'web') {
+      return 'http://localhost:3000';
+    }
+
+    // Android Emulator has its own special localhost mapping
+    if (Platform.OS === 'android') {
+      return 'http://10.0.2.2:3000';
+    }
+
+    // Expo dev server: automatically get host IP for physical iOS/Android device testing
     const debuggerHost = Constants.expoConfig?.hostUri ??
       (Constants.manifest as any)?.debuggerHost;
     const hostIP = debuggerHost?.split(':')[0];
 
-    if (Platform.OS === 'android') {
-      // Android Emulator için özel localhost adresi
-      return 'http://10.0.2.2:3000';
-    }
-
-    // iOS/fiziksel cihaz: Expo'nun algıladığı IP'yi kullan
     if (hostIP) {
       return `http://${hostIP}:3000`;
     }
 
-    // Fallback: localhost
+    // Default development fallback
     return 'http://localhost:3000';
   }
 
-  // Production Check
-  if (!API_URL) {
-    console.error('❌ CRITICAL: API_URL is missing in environment variables!');
-    console.warn('⚠️ Ensure .env was created during build via eas-build-pre-install hook.');
+  // Production: use API_URL from env
+  if (API_URL) {
+    return API_URL;
   }
 
-  return API_URL || 'http://localhost:3000'; // Fail safe but log error
+  console.error('❌ CRITICAL: API_URL is missing in environment variables!');
+  console.warn('⚠️ Ensure .env was created during build via eas-build-pre-install hook.');
+  return 'http://localhost:3000'; // Fail safe but log error
 };
 
 export const API_BASE_URL = getBaseURL();

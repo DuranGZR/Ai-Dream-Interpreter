@@ -18,7 +18,7 @@ import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { NotificationService } from '../services/NotificationService';
 import { Analytics } from '../services/AnalyticsService';
-import { API_ENDPOINTS } from '../config/api';
+import dreamService from '../services/dreamService';
 import { Feather } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -147,8 +147,7 @@ export default function ProfileScreen() {
   const loadStats = async () => {
     if (!user) return;
     try {
-      const response = await fetch(`${API_ENDPOINTS.dreams}?userId = ${user.id} `);
-      const dreams = await response.json();
+      const dreams = await dreamService.getDreams(user.id);
       if (!Array.isArray(dreams)) return;
 
       const total = dreams.length;

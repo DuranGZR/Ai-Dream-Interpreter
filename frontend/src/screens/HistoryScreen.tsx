@@ -122,7 +122,7 @@ export default function HistoryScreen() {
         // Local handling for guests
         const localDreams = await dreamService.getLocalDreams();
         const newLocal = localDreams.map(d => d.id === id ? { ...d, isFavorite: !currentFavorite } : d);
-        await dreamService['saveLocalDreams'](newLocal);
+        await dreamService.saveLocalDreams(newLocal);
       } else {
         // Backend update
         await dreamService.toggleFavorite(id, !currentFavorite);

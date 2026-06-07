@@ -94,14 +94,20 @@ export async function monitorApiCall<T>(
   
   try {
     const result = await apiCall();
-    transaction.setStatus('ok');
+    if (transaction) {
+      (transaction as any).setStatus('ok');
+    }
     addBreadcrumb(`API Success: ${name}`, 'api', { status: 'ok' });
     return result;
   } catch (error) {
-    transaction.setStatus('error');
+    if (transaction) {
+      (transaction as any).setStatus('error');
+    }
     addBreadcrumb(`API Error: ${name}`, 'api', { error: String(error) });
     throw error;
   } finally {
-    transaction.finish();
+    if (transaction) {
+      (transaction as any).finish();
+    }
   }
 }

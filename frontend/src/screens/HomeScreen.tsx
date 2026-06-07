@@ -4,8 +4,8 @@ import { Text, TextInput, ActivityIndicator, Snackbar } from 'react-native-paper
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
-import { API_ENDPOINTS } from '../config/api';
 import { OfflineService } from '../services/OfflineService';
+import dreamService from '../services/dreamService';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { BlurView } from 'expo-blur';
@@ -254,21 +254,12 @@ export default function HomeScreen() {
     // Mistik yükleme deneyimi için yapay bekleme
     await new Promise(resolve => setTimeout(resolve, 2500));
     try {
-      const response = await fetch(API_ENDPOINTS.interpret, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          dreamText,
-          userId: user.id,
-          persona: user.persona,
-          userName: user.firstName || user.name?.split(' ')[0] || undefined
-        }),
-      });
-
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const result = await response.json();
-
-
+      const result = await dreamService.interpretDream(
+        dreamText,
+        user.id,
+        user.persona,
+        user.firstName || user.name?.split(' ')[0] || undefined
+      );
 
       navigation.navigate('Result', { ...result, dreamText });
       setDreamText('');

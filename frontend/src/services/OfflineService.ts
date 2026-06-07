@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 import { API_ENDPOINTS } from '../config/api';
+import authService from './authService';
 
 interface QueuedDream {
   id: string;
@@ -85,12 +86,18 @@ export class OfflineService {
 
     for (const dream of queue) {
       try {
+        const token = await authService.getIdToken();
+        const headers: Record<string, string> = {
+          'Content-Type': 'application/json',
+        };
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
         // API'ye gönder
         const response = await fetch(API_ENDPOINTS.interpret, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers,
           body: JSON.stringify({ dreamText: dream.dreamText }),
         });
 

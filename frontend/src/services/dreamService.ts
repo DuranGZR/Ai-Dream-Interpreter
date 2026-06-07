@@ -1,215 +1,245 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_ENDPOINTS } from '../config/api';
+import authService from './authService';
+
+export interface DreamSymbol {
+  name: string;
+  meaning: string;
+}
 
 export interface Dream {
   id: string;
   userId: string;
-  content: string;
+  dreamText: string;
   interpretation?: string;
-  symbols?: Array<{ symbol: string; meaning: string }>;
+  energy?: number;
+  symbols?: DreamSymbol[];
   sentiment?: {
     score: number;
     label: string;
   };
-  createdAt: string;
-  isLocal?: boolean; // Misafir modunda local kayıt
+  date: string;
+  createdAt?: unknown;
+  isFavorite?: boolean;
+  isLocal?: boolean;
+}
+
+export interface SaveDreamInput {
+  userId: string;
+  dreamText: string;
+  interpretation: string;
+  energy: number;
+  symbols?: DreamSymbol[];
+  date?: string;
 }
 
 export interface InterpretationResponse {
   interpretation: string;
   energy: number;
-  symbols: Array<{ name: string; meaning: string; }>;
+  symbols: DreamSymbol[];
 }
 
 const DREAMS_STORAGE_KEY = '@dreams_storage';
 
 class DreamService {
-  // Rüya yorumlama isteği
-  async interpretDream(dreamText: string, userId: string): Promise<InterpretationResponse> {
-    try {
-      console.log('🔮 Rüya yorumlama isteği gönderiliyor...');
-      const response = await fetch(API_ENDPOINTS.interpret, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          dreamText,
-          userId,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log('✅ Rüya yorumu alındı');
-      return data as InterpretationResponse;
-    } catch (error) {
-      console.error('❌ Rüya yorumlama hatası:', error);
-      throw error;
-    }
+  private isGuestUser(userId: string): boolean {
+    return userId.startsWith('guest-');
   }
 
-  // Rüyayı kaydet (misafir için local, normal kullanıcı için backend)
-  async saveDream(dream: Omit<Dream, 'id' | 'createdAt'>): Promise<Dream> {
-    try {
-      const isGuest = dream.userId.startsWith('guest-');
+  private normalizeSymbols(symbols: unknown): DreamSymbol[] {
+    if (!Array.isArray(symbols)) return [];
 
-      if (isGuest) {
-        // Misafir kullanıcı - local storage'a kaydet
-        console.log('💾 Misafir modu - Rüya local storage\'a kaydediliyor...');
-        const newDream: Dream = {
-          ...dream,
-          id: Date.now().toString(),
-          createdAt: new Date().toISOString(),
-          isLocal: true,
-        };
-
-        const existingDreams = await this.getLocalDreams();
-        const updatedDreams = [newDream, ...existingDreams];
-        await AsyncStorage.setItem(DREAMS_STORAGE_KEY, JSON.stringify(updatedDreams));
-
-        console.log('✅ Rüya local storage\'a kaydedildi');
-        return newDream;
-      } else {
-        // Normal kullanıcı - backend'e kaydet
-        console.log('💾 Rüya backend\'e kaydediliyor...');
-        const response = await fetch(API_ENDPOINTS.dreams, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(dream),
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log('✅ Rüya backend\'e kaydedildi');
-        return data;
+    return symbols.map((symbol: any) => {
+      if (typeof symbol === 'string') {
+        return { name: symbol, meaning: '' };
       }
-    } catch (error) {
-      console.error('❌ Rüya kaydetme hatası:', error);
-      throw error;
-    }
+
+      return {
+        name: symbol.name || symbol.symbol || '',
+        meaning: symbol.meaning || '',
+      };
+    });
   }
 
-  // Local dreams'i getir
+  private normalizeDream(rawDream: any): Dream {
+    const date = rawDream.date || rawDream.createdAt || new Date().toISOString();
+
+    return {
+      ...rawDream,
+      id: rawDream.id || Date.now().toString(),
+      userId: rawDream.userId || 'guest-unknown',
+      dreamText: rawDream.dreamText || rawDream.content || '',
+      interpretation: rawDream.interpretation,
+      energy: typeof rawDream.energy === 'number' ? rawDream.energy : 50,
+      symbols: this.normalizeSymbols(rawDream.symbols),
+      date,
+      isFavorite: Boolean(rawDream.isFavorite),
+    };
+  }
+
+  private async getAuthHeaders(): Promise<Record<string, string>> {
+    const token = await authService.getIdToken();
+
+    if (!token) {
+      throw new Error('Kimlik dogrulama tokeni bulunamadi');
+    }
+
+    return {
+      Authorization: `Bearer ${token}`,
+    };
+  }
+
+  private async getOptionalAuthHeaders(): Promise<Record<string, string>> {
+    const token = await authService.getIdToken();
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  }
+
+  async interpretDream(
+    dreamText: string,
+    userId: string,
+    persona?: string,
+    userName?: string
+  ): Promise<InterpretationResponse> {
+    const response = await fetch(API_ENDPOINTS.interpret, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(await this.getOptionalAuthHeaders()),
+      },
+      body: JSON.stringify({
+        dreamText,
+        userId,
+        persona,
+        userName,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return response.json();
+  }
+
+  async saveDream(dream: SaveDreamInput): Promise<Dream> {
+    if (this.isGuestUser(dream.userId)) {
+      const newDream: Dream = {
+        id: Date.now().toString(),
+        userId: dream.userId,
+        dreamText: dream.dreamText,
+        interpretation: dream.interpretation,
+        energy: dream.energy,
+        symbols: this.normalizeSymbols(dream.symbols),
+        date: dream.date || new Date().toISOString(),
+        isFavorite: false,
+        isLocal: true,
+      };
+
+      const existingDreams = await this.getLocalDreams();
+      await this.saveLocalDreams([newDream, ...existingDreams]);
+
+      return newDream;
+    }
+
+    const response = await fetch(API_ENDPOINTS.dreams, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(await this.getAuthHeaders()),
+      },
+      body: JSON.stringify(dream),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const savedDream = await response.json();
+    return this.normalizeDream({
+      ...dream,
+      ...savedDream,
+      id: savedDream.id,
+    });
+  }
+
   async getLocalDreams(): Promise<Dream[]> {
     try {
       const dreamsJson = await AsyncStorage.getItem(DREAMS_STORAGE_KEY);
-      if (dreamsJson) {
-        return JSON.parse(dreamsJson);
-      }
-      return [];
+      if (!dreamsJson) return [];
+
+      const dreams = JSON.parse(dreamsJson);
+      return Array.isArray(dreams) ? dreams.map((dream) => this.normalizeDream(dream)) : [];
     } catch (error) {
-      console.error('❌ Local rüyalar yüklenemedi:', error);
+      console.error('Local dreams could not be loaded:', error);
       return [];
     }
   }
 
-  // Local dreams'i kaydet
   async saveLocalDreams(dreams: Dream[]): Promise<void> {
-    try {
-      await AsyncStorage.setItem(DREAMS_STORAGE_KEY, JSON.stringify(dreams));
-    } catch (error) {
-      console.error('❌ Local rüyalar kaydedilemedi:', error);
-      throw error;
-    }
+    await AsyncStorage.setItem(DREAMS_STORAGE_KEY, JSON.stringify(dreams.map((dream) => this.normalizeDream(dream))));
   }
 
-  // Tüm rüyaları getir (misafir için local, normal için backend)
-  // Tüm rüyaları getir (Cache destekli)
   async getDreams(userId: string): Promise<Dream[]> {
-    const CACHE_KEY = `${DREAMS_STORAGE_KEY}_${userId}`;
-    const isGuest = userId.startsWith('guest-');
+    const cacheKey = `${DREAMS_STORAGE_KEY}_${userId}`;
 
-    if (isGuest) {
-      console.log('📖 Misafir modu - Local rüyalar yükleniyor...');
-      const dreams = await this.getLocalDreams();
-      return dreams;
+    if (this.isGuestUser(userId)) {
+      return this.getLocalDreams();
     }
 
     try {
-      console.log('📖 Backend\'den rüyalar yükleniyor...');
-      const response = await fetch(`${API_ENDPOINTS.dreams}?userId=${userId}`);
+      const response = await fetch(`${API_ENDPOINTS.dreams}?userId=${encodeURIComponent(userId)}`, {
+        headers: await this.getAuthHeaders(),
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
-      console.log(`✅ ${data.length} rüya yüklendi (API)`);
+      const dreams = Array.isArray(data) ? data.map((dream) => this.normalizeDream(dream)) : [];
 
-      // Cache'i güncelle
-      await AsyncStorage.setItem(CACHE_KEY, JSON.stringify(data));
-
-      return data;
-
+      await AsyncStorage.setItem(cacheKey, JSON.stringify(dreams));
+      return dreams;
     } catch (error) {
-      console.warn('❌ API hatası, cache kontrol ediliyor:', error);
-
-      // API hatası durumunda cache'den dön
-      const cached = await AsyncStorage.getItem(CACHE_KEY);
+      const cached = await AsyncStorage.getItem(cacheKey);
       if (cached) {
-        console.log('📦 Cache\'den veri dönüldü');
-        return JSON.parse(cached);
+        const dreams = JSON.parse(cached);
+        return Array.isArray(dreams) ? dreams.map((dream) => this.normalizeDream(dream)) : [];
       }
 
       throw error;
     }
   }
 
-  // Favori durumunu güncelle
   async toggleFavorite(dreamId: string, isFavorite: boolean): Promise<void> {
-    try {
-      const response = await fetch(`${API_ENDPOINTS.dreams}/${dreamId}/favorite`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ isFavorite }),
-      });
+    const response = await fetch(`${API_ENDPOINTS.dreams}/${dreamId}/favorite`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(await this.getAuthHeaders()),
+      },
+      body: JSON.stringify({ isFavorite }),
+    });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      console.log('✅ Favori durumu güncellendi');
-    } catch (error) {
-      console.error('❌ Favori güncellenemedi:', error);
-      throw error;
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
   }
 
-  // Rüya sil
   async deleteDream(dreamId: string, userId: string): Promise<void> {
-    try {
-      const isGuest = userId.startsWith('guest-');
+    if (this.isGuestUser(userId)) {
+      const dreams = await this.getLocalDreams();
+      await this.saveLocalDreams(dreams.filter((dream) => dream.id !== dreamId));
+      return;
+    }
 
-      if (isGuest) {
-        console.log('🗑️ Local rüya siliniyor...');
-        const dreams = await this.getLocalDreams();
-        const updatedDreams = dreams.filter(d => d.id !== dreamId);
-        await AsyncStorage.setItem(DREAMS_STORAGE_KEY, JSON.stringify(updatedDreams));
-        console.log('✅ Rüya silindi');
-      } else {
-        console.log('🗑️ Backend\'den rüya siliniyor...');
-        const response = await fetch(API_ENDPOINTS.dreamById(dreamId), {
-          method: 'DELETE',
-        });
+    const response = await fetch(API_ENDPOINTS.dreamById(dreamId), {
+      method: 'DELETE',
+      headers: await this.getAuthHeaders(),
+    });
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        console.log('✅ Rüya silindi');
-      }
-    } catch (error) {
-      console.error('❌ Rüya silinemedi:', error);
-      throw error;
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
   }
 }
