@@ -4,9 +4,10 @@
   "description": "AI Dream Interpreter Backend",
   "main": "dist/server.js",
   "scripts": {
-    "dev": "ts-node src/server.ts",
+    "dev": "nodemon --watch src -e ts --exec ts-node src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -30,6 +31,7 @@
     "@types/node": "^20.10.5",
     "@types/react": "~19.1.10",
     "jest": "^30.2.0",
+    "nodemon": "^3.1.0",
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"

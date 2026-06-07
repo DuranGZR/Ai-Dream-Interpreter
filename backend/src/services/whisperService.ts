@@ -32,6 +32,7 @@ export async function transcribeAudioBuffer(
   filename: string,
   openaiClient: OpenAI
 ): Promise<string> {
+  let tempFilePath = '';
   try {
     // Geçici dosya oluştur
     const tempDir = path.join(__dirname, '../../uploads');
@@ -40,21 +41,26 @@ export async function transcribeAudioBuffer(
       fs.mkdirSync(tempDir, { recursive: true });
     }
 
-    const tempFilePath = path.join(tempDir, `temp-${Date.now()}-${filename}`);
+    tempFilePath = path.join(tempDir, `temp-${Date.now()}-${filename}`);
     
     // Buffer'ı dosyaya yaz
     fs.writeFileSync(tempFilePath, audioBuffer);
 
     // Transkribe et
     const transcription = await transcribeAudio(tempFilePath, openaiClient);
-
-    // Geçici dosyayı sil
-    fs.unlinkSync(tempFilePath);
-
     return transcription;
   } catch (error) {
     console.error('Buffer transkripsiyon hatası:', error);
     throw error;
+  } finally {
+    // Her koşulda geçici dosyayı temizle
+    if (tempFilePath && fs.existsSync(tempFilePath)) {
+      try {
+        fs.unlinkSync(tempFilePath);
+      } catch (unlinkError) {
+        console.error('Geçici dosya silinirken hata oluştu:', unlinkError);
+      }
+    }
   }
 }
 

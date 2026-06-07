@@ -16,9 +16,9 @@ interface SymbolMapping {
 const EMOJI_MAP: { [key: string]: string } = {
   'su': '💧', 'ateş': '🔥', 'uçmak': '🕊️', 'düşmek': '⬇️', 'yılan': '🐍',
   'köpek': '🐕', 'kedi': '🐈', 'ev': '🏠', 'araba': '🚗', 'ölüm': '💀',
-  'bebek': '👶', 'para': '�', 'deniz': '🌊', 'dağ': '⛰️', 'ay': '🌙',
-  'güneş': '☀️', 'yıldız': '⭐', 'kuş': '�', 'ağaç': '🌳', 'ayna': '🪞',
-  'kapı': '🚪', 'merdiven': '🪜', 'diş': '🦷', 'saç': '💇', 'göz': '�️',
+  'bebek': '👶', 'para': '💵', 'deniz': '🌊', 'dağ': '⛰️', 'ay': '🌙',
+  'güneş': '☀️', 'yıldız': '⭐', 'kuş': '🐦', 'ağaç': '🌳', 'ayna': '🪞',
+  'kapı': '🚪', 'merdiven': '🪜', 'diş': '🦷', 'saç': '💇', 'göz': '👁️',
   'yemek': '🍽️', 'ekmek': '🍞', 'kitap': '📖', 'yol': '🛣️'
 };
 

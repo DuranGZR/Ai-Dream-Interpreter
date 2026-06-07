@@ -4,7 +4,7 @@ import path from 'path';
 // ÖNCE dotenv.config() çağrılmalı
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import admin from 'firebase-admin';
 import fs from 'fs';
@@ -16,7 +16,7 @@ import { AIFactory } from './services/AIProvider';
 import { interpretDream } from './services/dreamInterpreter';
 
 const app = express();
-const PORT = parseInt(process.env.PORT || '3001', 10);
+const PORT = parseInt(process.env.PORT || '3000', 10);
 
 // Middleware
 app.use(cors());
@@ -42,22 +42,32 @@ let db: any = null;
 let firebaseInitialized = false;
 
 try {
-  // serviceAccount.json dosyasını kullan (ÖNERİLEN YÖNTEM)
+  const serviceAccountKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
   const serviceAccountPath = path.resolve(__dirname, '../serviceAccount.json');
+  const serviceAccount = serviceAccountKey
+    ? JSON.parse(serviceAccountKey)
+    : fs.existsSync(serviceAccountPath)
+      ? require(serviceAccountPath)
+      : null;
 
-  if (fs.existsSync(serviceAccountPath)) {
-    console.log('📁 serviceAccount.json bulundu, Firebase başlatılıyor...');
-    const serviceAccount = require(serviceAccountPath);
+  if (serviceAccount) {
+    console.log(serviceAccountKey
+      ? 'Firebase service account env bulundu, Firebase baslatiliyor...'
+      : 'serviceAccount.json bulundu, Firebase baslatiliyor...');
 
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-    });
+    if (admin.apps.length === 0) {
+      admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
+        databaseURL: process.env.FIREBASE_DATABASE_URL,
+        storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+      });
+    }
 
     db = admin.firestore();
     firebaseInitialized = true;
-    console.log('✅ Firebase Admin SDK başarıyla başlatıldı!');
+    console.log('Firebase Admin SDK basariyla baslatildi.');
   } else {
-    console.warn('⚠️  serviceAccount.json dosyası bulunamadı - backend klasörüne ekleyin');
+    console.warn('Firebase service account bulunamadi. FIREBASE_SERVICE_ACCOUNT_KEY veya backend/serviceAccount.json ekleyin.');
   }
 } catch (error) {
   console.error('❌ Firebase Admin SDK hatası:', error);
@@ -65,6 +75,95 @@ try {
 }
 
 // Sembol veritabanını yükle
+type AuthenticatedUser = {
+  uid: string;
+  email?: string;
+  name?: string;
+};
+
+declare global {
+  namespace Express {
+    interface Request {
+      authUser?: AuthenticatedUser;
+    }
+  }
+}
+
+function getBearerToken(req: Request): string | null {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return null;
+  }
+
+  const token = authHeader.slice('Bearer '.length).trim();
+  return token || null;
+}
+
+async function verifyBearerToken(req: Request): Promise<AuthenticatedUser | null> {
+  const token = getBearerToken(req);
+  if (!token) {
+    console.log('⚠️ verifyBearerToken: Authorization header or Bearer token is missing');
+    return null;
+  }
+
+  if (!firebaseInitialized) {
+    console.log('⚠️ verifyBearerToken: Firebase is not initialized');
+    throw new Error('Firebase Auth yapilandirilmamis');
+  }
+
+  try {
+    const decodedToken = await admin.auth().verifyIdToken(token);
+    return {
+      uid: decodedToken.uid,
+      email: decodedToken.email,
+      name: decodedToken.name,
+    };
+  } catch (error) {
+    console.error('❌ verifyBearerToken: Firebase token verification failed:', error);
+    throw error;
+  }
+}
+
+async function optionalFirebaseAuth(req: Request, res: Response, next: NextFunction) {
+  try {
+    const user = await verifyBearerToken(req);
+    if (user) req.authUser = user;
+    next();
+  } catch (error) {
+    console.error('Optional auth hatasi:', error);
+    res.status(401).json({ error: 'Gecersiz veya suresi dolmus token' });
+  }
+}
+
+async function requireFirebaseAuth(req: Request, res: Response, next: NextFunction) {
+  try {
+    const user = await verifyBearerToken(req);
+    if (!user) {
+      console.log('⚠️ requireFirebaseAuth: No authenticated user found, returning 401');
+      return res.status(401).json({ error: 'Kimlik dogrulama gerekli' });
+    }
+
+    req.authUser = user;
+    next();
+  } catch (error) {
+    console.error('❌ requireFirebaseAuth: Auth hatasi:', error);
+    res.status(firebaseInitialized ? 401 : 503).json({
+      error: firebaseInitialized
+        ? 'Gecersiz veya suresi dolmus token'
+        : 'Firebase Auth yapilandirilmamis',
+    });
+  }
+}
+
+function isGuestUserId(userId: unknown): userId is string {
+  return typeof userId === 'string' && userId.startsWith('guest-');
+}
+
+function requestedUserMatchesAuthenticatedUser(req: Request, requestedUserId: unknown): boolean {
+  return !requestedUserId || requestedUserId === req.authUser?.uid;
+}
+
 const symbolsPath = path.resolve(__dirname, '../data/dream_symbols.json');
 const dreamSymbols = JSON.parse(fs.readFileSync(symbolsPath, 'utf-8'));
 
@@ -153,7 +252,7 @@ function validateDreamText(text: string): { valid: boolean; error?: string } {
 }
 
 // 1. Rüya Yorumlama (Cache + Rate Limit + Validation) - Gemini Flash
-app.post('/api/interpret', interpretLimiter, async (req, res) => {
+app.post('/api/interpret', interpretLimiter, optionalFirebaseAuth, async (req, res) => {
   try {
     const { dreamText, userId, persona, userName } = req.body;
 
@@ -166,7 +265,8 @@ app.post('/api/interpret', interpretLimiter, async (req, res) => {
     const sanitizedText = dreamText.trim();
 
     // Cache kontrolü - MD5 hash ile (Persona da cache key'e eklenmeli!)
-    const cacheKey = getCacheKey(sanitizedText + (userId || '') + (persona || ''));
+    const effectiveUserId = req.authUser?.uid || (isGuestUserId(userId) ? userId : undefined);
+    const cacheKey = getCacheKey(sanitizedText + (effectiveUserId || '') + (persona || ''));
     const cached = cache.get(cacheKey);
 
     if (cached) {
@@ -179,7 +279,7 @@ app.post('/api/interpret', interpretLimiter, async (req, res) => {
     console.log(`⏳ Cache MISS - AI çağrısı yapılıyor... (${cacheHits}/${cacheHits + cacheMisses})`);
 
     // Merkezi yorumlama servisini kullan (Persona ve UserName ile)
-    const result = await interpretDream(sanitizedText, userId, persona, userName);
+    const result = await interpretDream(sanitizedText, effectiveUserId, persona, userName);
 
     // Response formatını frontend'in beklediği yapıya dönüştür
     const response = {
@@ -202,17 +302,18 @@ app.post('/api/interpret', interpretLimiter, async (req, res) => {
 });
 
 // 2. Rüya Kaydetme (Rate Limited + Validation)
-app.post('/api/dreams', dreamsLimiter, async (req, res) => {
+app.post('/api/dreams', dreamsLimiter, requireFirebaseAuth, async (req, res) => {
   if (!firebaseInitialized || !db) {
     return res.status(503).json({ error: 'Firebase bağlantısı yok - Rüya kaydetme devre dışı' });
   }
 
   try {
     const { dreamText, interpretation, energy, symbols, date, userId } = req.body;
+    const authenticatedUserId = req.authUser!.uid;
 
     // Validation
-    if (!userId) {
-      return res.status(400).json({ error: 'userId gerekli' });
+    if (!requestedUserMatchesAuthenticatedUser(req, userId)) {
+      return res.status(403).json({ error: 'Bu kullanıcı adına rüya kaydedilemez' });
     }
 
     const validation = validateDreamText(dreamText);
@@ -229,7 +330,7 @@ app.post('/api/dreams', dreamsLimiter, async (req, res) => {
     }
 
     const dreamRef = await db.collection('dreams').add({
-      userId,
+      userId: authenticatedUserId,
       dreamText: dreamText.trim(),
       interpretation: interpretation.trim(),
       energy,
@@ -247,20 +348,21 @@ app.post('/api/dreams', dreamsLimiter, async (req, res) => {
 });
 
 // 3. Rüyaları Listeleme (userId'ye göre + Rate Limited)
-app.get('/api/dreams', dreamsLimiter, async (req, res) => {
+app.get('/api/dreams', dreamsLimiter, requireFirebaseAuth, async (req, res) => {
   if (!firebaseInitialized || !db) {
     return res.json([]);  // Boş liste dön
   }
 
   try {
     const { userId } = req.query;
+    const authenticatedUserId = req.authUser!.uid;
 
-    if (!userId) {
-      return res.status(400).json({ error: 'userId gerekli' });
+    if (!requestedUserMatchesAuthenticatedUser(req, userId)) {
+      return res.status(403).json({ error: 'Bu kullanıcının rüyaları listelenemez' });
     }
 
     const dreamsSnapshot = await db.collection('dreams')
-      .where('userId', '==', userId)
+      .where('userId', '==', authenticatedUserId)
       .get();
 
     const dreams = dreamsSnapshot.docs
@@ -284,7 +386,7 @@ app.get('/api/dreams', dreamsLimiter, async (req, res) => {
 });
 
 // 4. Rüya Silme (Rate Limited)
-app.delete('/api/dreams/:id', dreamsLimiter, async (req, res) => {
+app.delete('/api/dreams/:id', dreamsLimiter, requireFirebaseAuth, async (req, res) => {
   if (!firebaseInitialized || !db) {
     return res.status(503).json({ error: 'Firebase bağlantısı yok' });
   }
@@ -296,7 +398,18 @@ app.delete('/api/dreams/:id', dreamsLimiter, async (req, res) => {
       return res.status(400).json({ error: 'Geçersiz rüya ID' });
     }
 
-    await db.collection('dreams').doc(id).delete();
+    const dreamRef = db.collection('dreams').doc(id);
+    const dreamSnapshot = await dreamRef.get();
+
+    if (!dreamSnapshot.exists) {
+      return res.status(404).json({ error: 'Ruya bulunamadi' });
+    }
+
+    if (dreamSnapshot.data()?.userId !== req.authUser!.uid) {
+      return res.status(403).json({ error: 'Bu ruyayi silme yetkiniz yok' });
+    }
+
+    await dreamRef.delete();
     res.json({ message: 'Rüya silindi' });
   } catch (error) {
     console.error('Silme hatası:', error);
@@ -305,7 +418,7 @@ app.delete('/api/dreams/:id', dreamsLimiter, async (req, res) => {
 });
 
 // 5. Favori Toggle (Rate Limited)
-app.patch('/api/dreams/:id/favorite', dreamsLimiter, async (req, res) => {
+app.patch('/api/dreams/:id/favorite', dreamsLimiter, requireFirebaseAuth, async (req, res) => {
   if (!firebaseInitialized || !db) {
     return res.status(503).json({ error: 'Firebase bağlantısı yok' });
   }
@@ -322,7 +435,18 @@ app.patch('/api/dreams/:id/favorite', dreamsLimiter, async (req, res) => {
       return res.status(400).json({ error: 'isFavorite boolean olmalı' });
     }
 
-    await db.collection('dreams').doc(id).update({
+    const dreamRef = db.collection('dreams').doc(id);
+    const dreamSnapshot = await dreamRef.get();
+
+    if (!dreamSnapshot.exists) {
+      return res.status(404).json({ error: 'Ruya bulunamadi' });
+    }
+
+    if (dreamSnapshot.data()?.userId !== req.authUser!.uid) {
+      return res.status(403).json({ error: 'Bu ruyayi guncelleme yetkiniz yok' });
+    }
+
+    await dreamRef.update({
       isFavorite,
       updatedAt: admin.firestore.FieldValue.serverTimestamp(),
     });
@@ -337,6 +461,12 @@ app.patch('/api/dreams/:id/favorite', dreamsLimiter, async (req, res) => {
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
+// Global error handling middleware
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  console.error('💥 Unhandled Error:', err);
+  res.status(500).json({ error: 'Sunucu içi bir hata oluştu' });
 });
 
 // Server başlatma - Local development için

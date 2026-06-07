@@ -38,7 +38,7 @@ export function analyzeSentiment(text: string): string {
 
   // Pozitif kelimeleri say
   positiveWords.forEach((word) => {
-    const regex = new RegExp(`\\b${word}\\b`, 'gi');
+    const regex = new RegExp(`(?<=^|[^a-zA-Z0-9çğıöşüÇĞİÖŞÜ])${word}(?=$|[^a-zA-Z0-9çğıöşüÇĞİÖŞÜ])`, 'gi');
     const matches = lowerText.match(regex);
     if (matches) {
       positiveScore += matches.length;
@@ -47,7 +47,7 @@ export function analyzeSentiment(text: string): string {
 
   // Negatif kelimeleri say
   negativeWords.forEach((word) => {
-    const regex = new RegExp(`\\b${word}\\b`, 'gi');
+    const regex = new RegExp(`(?<=^|[^a-zA-Z0-9çğıöşüÇĞİÖŞÜ])${word}(?=$|[^a-zA-Z0-9çğıöşüÇĞİÖŞÜ])`, 'gi');
     const matches = lowerText.match(regex);
     if (matches) {
       negativeScore += matches.length;

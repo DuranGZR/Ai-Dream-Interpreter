@@ -4,6 +4,7 @@ import { extractSymbols, extractDreamContext } from './dreamSymbols';
 import { getDemoInterpretation } from '../demoData';
 import * as fs from 'fs';
 import * as path from 'path';
+import admin from 'firebase-admin';
 
 interface Dream {
   id: string;
@@ -78,6 +79,19 @@ export async function interpretDream(
 // Rüya geçmişini getir
 export async function getDreamHistory(userId: string): Promise<Dream[]> {
   try {
+    // Eğer Firebase Admin SDK başlatılmışsa Firestore'dan verileri çek
+    if (admin.apps.length > 0) {
+      const db = admin.firestore();
+      const dreamsSnapshot = await db.collection('dreams')
+        .where('userId', '==', userId)
+        .get();
+
+      return dreamsSnapshot.docs.map((doc: any) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as any[];
+    }
+
     const dataPath = path.join(__dirname, '../../data/dreams.json');
 
     // Dosya yoksa boş array döndür
